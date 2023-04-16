@@ -25,10 +25,10 @@
         <a href="#" class="navbar-menu-item">Home</a>
         <a href="#" class="navbar-menu-item">Checking/Savings</a>
         <a href="#" class="navbar-menu-item">Loans</a>
-        <a href="#" class="navbar-menu-item">Log out</a>
+        <a href="{% url 'logout' %}" class="navbar-menu-item">Log out</a>
         {% endif %}
       </nav>
     </div>
-    <div class="body">{% block body %} {% endblock %}</div>
+    <div class="block-body">{% block body %} {% endblock %}</div>
   </body>
 </html>
