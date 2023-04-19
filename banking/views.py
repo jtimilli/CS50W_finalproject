@@ -5,12 +5,11 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
+from decimal import Decimal
 
-from .models import User
+from .models import User, Account, Transactions
 
 # Create your views here.
-
-# TODO: Allow users to register and be redirected to index page
 
 
 @csrf_exempt
@@ -46,17 +45,19 @@ def register(request):
         except IntegrityError:
             message = "Username already exists"
             return render(request, "banking/register.html", {"username_error": message})
-
+        account = Account.objects.create(user=user)
+        account.save()
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
 
 
-@login_required
+@login_required()
 def index(request):
-    return render(request, 'banking/homepage.html')
+    account = Account.objects.get(user=request.user)
+    transactions = Transactions.objects.filter(account=account)
+    return render(request, 'banking/homepage.html', {"account": account, "transactions": transactions})
 
 
-# TODO: Allow user to login
 @csrf_exempt
 def login_user(request):
     if request.method == "POST":
@@ -78,7 +79,34 @@ def login_user(request):
         return render(request, "banking/login.html")
 
 
-# TODO: Implement logout
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse("login"))
+
+
+def deposit(request):
+    if request.method == "POST":
+        user = request.user
+
+        deposit = request.POST.get("amount")
+
+        if Decimal(deposit) > 0.01:
+            try:
+                account = Account.objects.get(user=user)
+                account.balance = Decimal(account.balance) + Decimal(deposit)
+                account.save()
+                transaction = Transactions.objects.create(
+                    account=account, transactions=f"Deposited ${deposit} amount to your account")
+                transaction.save()
+                print(account.balance)
+            except Account.DoesNotExist:
+                HttpResponse("Something went wrong")
+        else:
+            return HttpResponse("Invalid amount-amount must be over 1 penny")
+        return HttpResponseRedirect(reverse(index))
+    else:
+        pass
+
+
+def loans(request):
+    return render(request, "banking/loans.html")
