@@ -1,17 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
-  document
-    .querySelector("#make-deposit-btn")
-    .addEventListener("click", function () {
-      document.querySelector("#add-money").style.display = "block";
-      document.querySelector("#add-money").style.opacity = "1";
-    });
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip();
 
-  document
-    .querySelector("#close-deposit")
-    .addEventListener("click", function () {
-      document.querySelector("#add-money").style.opacity = "0";
-      setTimeout(function () {
-        document.querySelector("#add-money").style.display = "none";
-      }, 500); // Wait for the transition to complete before setting display to "none"
-    });
+  document.querySelector("#make-deposit").addEventListener("click", deposit);
 });
+
+function deposit() {
+  alert("test");
+  $("#add-money").modal("toggle");
+}

@@ -54,7 +54,8 @@ def register(request):
 @login_required()
 def index(request):
     account = Account.objects.get(user=request.user)
-    transactions = Transactions.objects.filter(account=account)
+    transactions = Transactions.objects.filter(
+        account=account).order_by('-timestamp')
     return render(request, 'banking/homepage.html', {"account": account, "transactions": transactions})
 
 
@@ -110,3 +111,5 @@ def deposit(request):
 
 def loans(request):
     return render(request, "banking/loans.html")
+
+# TODO: Create save feature for banking transactions
