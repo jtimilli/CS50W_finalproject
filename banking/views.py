@@ -1,3 +1,4 @@
+import csv
 from django.shortcuts import render
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -113,3 +114,20 @@ def loans(request):
     return render(request, "banking/loans.html")
 
 # TODO: Create save feature for banking transactions
+
+
+def save_transactions(request):
+    account = Account.objects.get(user=request.user)
+    transactions = Transactions.objects.filter(account=account)
+
+    # Create csv file
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = "attachment; filename=bankstatement.csv"
+
+    # Write transactions to csv file
+    writer = csv.writer(response)
+    writer.writerow(['transactions'])
+    for transaction in transactions:
+        writer.writerow(transaction.transactions)
+
+    return response

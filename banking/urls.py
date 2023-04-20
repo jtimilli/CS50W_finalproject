@@ -11,7 +11,8 @@ urlpatterns = [
 
     # APIs
 
-    path("deposit/", views.deposit, name="deposit")
+    path("deposit/", views.deposit, name="deposit"),
+    path("download_csv/", views.save_transactions, name="download_csv")
 
 
 ]
