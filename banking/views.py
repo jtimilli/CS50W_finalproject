@@ -1,7 +1,8 @@
 import csv
+import json
 from django.shortcuts import render
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -86,11 +87,12 @@ def logout_user(request):
     return HttpResponseRedirect(reverse("login"))
 
 
+@csrf_exempt
 def deposit(request):
     if request.method == "POST":
         user = request.user
 
-        deposit = request.POST.get("amount")
+        deposit = json.loads(request.body).get("amount")
 
         if Decimal(deposit) > 0.01:
             try:
@@ -100,12 +102,12 @@ def deposit(request):
                 transaction = Transactions.objects.create(
                     account=account, transactions=f"Deposited ${deposit} amount to your account")
                 transaction.save()
-                print(account.balance)
+                return JsonResponse("Deposit cash succesfully")
             except Account.DoesNotExist:
-                HttpResponse("Something went wrong")
+                return JsonResponse("Something went wrong")
         else:
-            return HttpResponse("Invalid amount-amount must be over 1 penny")
-        return HttpResponseRedirect(reverse(index))
+            return JsonResponse("Invalid amount-amount must be over 1 penny")
+        # return HttpResponseRedirect(reverse(index))
     else:
         pass
 
@@ -113,21 +115,63 @@ def deposit(request):
 def loans(request):
     return render(request, "banking/loans.html")
 
-# TODO: Create save feature for banking transactions
+# TODO: edit columns and how timestamp is presented
 
 
-def save_transactions(request):
+def download_transactions(request):
     account = Account.objects.get(user=request.user)
     transactions = Transactions.objects.filter(account=account)
 
-    # Create csv file
+    # Create CSV file
     response = HttpResponse(content_type="text/csv")
     response["Content-Disposition"] = "attachment; filename=bankstatement.csv"
 
-    # Write transactions to csv file
-    writer = csv.writer(response)
-    writer.writerow(['transactions'])
+    # Define fieldnames for CSV
+    fieldnames = ['transaction_date',
+                  'transaction_amount']  # Example fieldnames
+
+    # Write transactions to CSV
+    writer = csv.DictWriter(response, fieldnames=fieldnames)
+    writer.writeheader()  # Write CSV header row
     for transaction in transactions:
-        writer.writerow(transaction.transactions)
+        writer.writerow({
+            'transaction_date': transaction.timestamp,
+            'transaction_amount': transaction.transactions
+
+        })
 
     return response
+
+
+def transfer_funds(request):
+    account = Account.objects.get(user=request.user)
+    if request.method == "POST":
+        receiving_account_number = request.POST.get(
+            "receiverAccountNumber", None)
+        transfer_amount = request.POST.get("transferAmount", None)
+
+        if receiver_account_number != None and transfer_amount != None:
+            # Check to see if user has enough money to send
+            if account.balance < transfer_amount:
+                return HttpResponse("You do not have enough to send that amount at the moment")
+
+            # Check receiver's account number is a valid account
+            try:
+                receiver = Account.objects.get(
+                    account=receiving_account_number)
+            except Account.DoesNotExist:
+                return HttpResponse("No users with that account number")
+
+            receiver.balance += transfer_amount
+            account.balance -= transfer_amount
+            receiver.save()
+            account.save()
+            return HttpResponseRedirect(reverse("index"))
+
+        elif receiver_account_number == None:
+            return HttpResponse("Must enter an account number")
+        elif transfer_amount == None:
+            return HttpResponse("Must enter an amount to send")
+
+    else:
+        return render(request, "banking/transfer.html", {"account": account})

@@ -3,13 +3,13 @@
   <header>
     <h1>Hello, {{account.user.first_name}} {{account.user.last_name}}</h1>
     <nav>
-      <strong>Account Number:</strong> {{account.account_number}} <br>
-      <strong>Account Type:</strong> {{account.account_number}}
+      <strong>Account Number: </strong><span data-toggle="tooltip" title="Click to see/hide account number" id="account_number" data-account_number="{{account.account_number}}" style="cursor:grab;"> *********** </span> <br>
+      <strong >Account Type: </strong> Checking
       <!-- Add navigation links here, such as "Home", "Accounts", "Transactions", etc. -->
     </nav>    
   </header>
 
-
+<!-- Button to make deposit - "Make Deposit" -->
   <main>
     <section id="account-summary">
       <button
@@ -17,38 +17,14 @@
       class="btn btn-info"
       data-toggle="modal"
       data-target="#myModal"
+      id="open_deposit"
     >
-      Add money
+      Make Deposit
     </button>
         <div style="text-align: center;"><strong class="">Account Balance:</strong> <div class="display-3">${{account.balance}}</div></div>
     </section>
 
-
-
-    <section id="add-money" class="modal fade">
-      <div id="close-deposit" style="margin-left: 99%; cursor: pointer">x</div>
-      <h2 class="mb-4">Add Money to Your Account</h2>
-      <form action="{% url 'deposit' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="amount">Amount:</label>
-          <input
-            type="number"
-            id="amount"
-            name="amount"
-            min="0"
-            step="0.01"
-            required
-            class="form-control"
-          />
-        </div>
-        <button class="btn btn-info m-2" id="make-deposit">Deposit</button>
-      </form>
-    </section>
-
-   
-    </div>
-
+    <!-- Widgets at the button of the sreen -->
     <section id="widget">
       <div class="card shadow mb-5 ml-5 bg-white rounded">
         <h3>Useful Information</h3>
@@ -63,13 +39,12 @@
     <div class="card-body p-0">
       <ul class="list-group m-0">
       {% for history in transactions %}
-    <li class="list-group-item list-group-item-action" data-toggle="tooltip" title="title" data-placement="left">{{history.transactions}}</li>
+    <li class="list-group-item list-group-item-action" data-toggle="tooltip" title="{{history.timestamp}}" data-placement="top">{{history.transactions}}</li>
     {% empty %}
     <div>No transaction yet</div>
     {% endfor %}
   </ul></div>
-  <div class="card-footer"><button><a href="{% url 'download_csv'%}" style="text-decoration: none;"> Download</a> </button></div>
-       
+  <div class="card-footer"><button class="btn btn-info"><a href="{% url 'download_csv'%}" style="text-decoration: none; color: white;"> Download</a> </button></div>
         
       </div>
     </section>
@@ -79,7 +54,7 @@
   <div class="container mt-3">
 
 
-    <!-- The Modal -->
+    <!-- The modal to add money (hidden initially) -->
     <div class="modal fade" id="myModal">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -91,21 +66,21 @@
 
           <!-- Modal body -->
           <div class="modal-body"> 
-            <form action="{% url 'deposit' %}" method="post">
+            <form method="post">
               {% csrf_token %}
               <div class="form-group">
                 <label for="amount">Amount:</label>
                 <input
                   type="number"
-                  id="amount"
+                  id="deposit_amount"
                   name="amount"
                   min="0"
-                  step="0.01"
+                  step="1.00"
                   required
                   class="form-control"
                 />
               </div>
-              <button type="open-deposit" class="btn btn-primary m-2">Deposit</button></div>
+              <button class="btn btn-primary m-2 " id="make-deposit">Deposit</button></div>
 
 
           </div>

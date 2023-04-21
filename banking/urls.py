@@ -8,11 +8,12 @@ urlpatterns = [
     path("login/", views.login_user, name="login"),
     path("logout/", views.logout_user, name="logout"),
     path("loans/", views.loans, name="loans"),
+    path("transfer/", views.transfer_funds, name="transfer"),
 
     # APIs
 
     path("deposit/", views.deposit, name="deposit"),
-    path("download_csv/", views.save_transactions, name="download_csv")
+    path("download_csv/", views.download_transactions, name="download_csv")
 
 
 ]
