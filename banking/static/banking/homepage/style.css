@@ -96,8 +96,8 @@ footer {
 
 #widget {
   display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
+  justify-content: space-around;
+  margin-top: 50px;
 }
 
 .widget {
@@ -126,4 +126,8 @@ footer {
   margin-bottom: 10px;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
+}
+
+.card {
+  width: 400px;
 }

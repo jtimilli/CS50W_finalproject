@@ -4,7 +4,7 @@
     <h1>Hello, {{account.user.first_name}} {{account.user.last_name}}</h1>
     <nav>
       <strong>Account Number: </strong><span data-toggle="tooltip" title="Click to see/hide account number" id="account_number" data-account_number="{{account.account_number}}" style="cursor:grab;"> *********** </span> <br>
-      <strong >Account Type: </strong> Checking
+      <strong >Account Type: </strong> {{account.account_type}}
       <!-- Add navigation links here, such as "Home", "Accounts", "Transactions", etc. -->
     </nav>    
   </header>
@@ -26,27 +26,72 @@
 
     <!-- Widgets at the button of the sreen -->
     <section id="widget">
-      <div class="card shadow mb-5 ml-5 bg-white rounded">
-        <h3>Useful Information</h3>
-        <ul>
-          <li>Check out our latest promotions</li>
-          <li>Learn about our savings and investment options</li>
-          <li>Get tips for managing your finances</li>
-        </ul>
+
+      <!-- Widget #1 -->
+      <div class="card shadow mb-5  bg-white rounded">
+        <div class="card-header"> <h3>Something Useful</h3></div>
+        <div class="card-body p-0">    <ul>
+          </div>
+        <div class="card-footer"></div>
       </div>
-      <div class="card shadow mb-5 mr-5 bg-white rounded">
+
+      <!-- Widget #2 -->
+      <div class="card shadow mb-5 bg-white rounded">
         <div class="card-header"> <h3>Transactions</h3></div>
-    <div class="card-body p-0">
+        <div class="card-body p-0">
       <ul class="list-group m-0">
-      {% for history in transactions %}
-    <li class="list-group-item list-group-item-action" data-toggle="tooltip" title="{{history.timestamp}}" data-placement="top">{{history.transactions}}</li>
-    {% empty %}
-    <div>No transaction yet</div>
-    {% endfor %}
-  </ul></div>
-  <div class="card-footer"><button class="btn btn-info"><a href="{% url 'download_csv'%}" style="text-decoration: none; color: white;"> Download</a> </button></div>
-        
+            {% for history in transactions %}
+          <li class="list-group-item list-group-item-action" data-toggle="tooltip" title="{{history.timestamp}}" data-placement="top">
+            {{history.transactions}}</li>
+                  {% empty %}
+          <span class="m-2"><strong>No transaction yet</strong></span>
+                  {% endfor %}
+      </ul></div>
+      <div class="card-footer"><button class="btn btn-info"><a href="{% url 'download_csv'%}" style="text-decoration: none; color: white;"> Download</a> </button></div>
       </div>
+
+
+      <!-- Widget #3 -->
+      <div class="card shadow mb-5 bg-white rounded">
+        <div class="card-header"> <h3>Maybe investments</h3></div>
+        <div class="card-body p-2"> 
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Symbol</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Price</th>
+                <th scope="col">Trending</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+       </div>
+        <div class="card-footer"></div>
+      </div>
+
+    
+
+
     </section>
 
     <!-- Add more sections or content as needed -->

@@ -16,6 +16,14 @@
       <input type="email" placeholder="Enter email " name="email" />
     </div>
     <div>
+      <label>Account Type: </label>
+      <select name="account_type" class="custom-select" required>
+        <option selected>Select an account</option>
+        <option class="" value="Checking">Checking</option>
+        <option class="" value="Savings">Savings</option>
+      </select>
+    </div>
+    <div>
       <label>Username</label>
       <input type="text" placeholder="Username here.. " name="username" />
       {% if username_error %}
@@ -34,6 +42,10 @@
         placeholder="Renter password"
         name="confirm_password"
       />
+
+      <p class="text-center mt-3">
+        Already have an account? <a href="{% url 'login' %}">Login</a>
+      </p>
       {% if password_error %}
       <div class="error-message">{{password_error}}</div>
       {% endif %}

@@ -16,7 +16,7 @@ class Account(models.Model):
         User, on_delete=models.CASCADE, related_name="account_holder")
     account_number = models.CharField(max_length=10, unique=True, blank=True)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    # account_type = models.CharField(max_length=25)
+    account_type = models.CharField(max_length=25, null=True)
 
     unique_together = ["user", "account_number"]
 

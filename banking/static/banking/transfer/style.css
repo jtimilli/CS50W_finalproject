@@ -1,0 +1,8 @@
+/* Custom CSS for the transfer form */
+#transferForm {
+  max-width: 500px; /* Adjust to desired form width */
+  margin: 0 auto; /* Center the form horizontally */
+  padding: 20px;
+  background-color: #f8f9fa; /* Set desired background color */
+  border-radius: 5px; /* Add border radius for rounded corners */
+}

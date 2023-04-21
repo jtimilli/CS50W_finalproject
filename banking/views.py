@@ -25,6 +25,7 @@ def register(request):
         first_name = request.POST["first_name"]
         last_name = request.POST["last_name"]
         email = request.POST["email"]
+        account_type = request.POST["account_type"]
 
         # Ensure passwords match
         password = request.POST["password"]
@@ -47,7 +48,7 @@ def register(request):
         except IntegrityError:
             message = "Username already exists"
             return render(request, "banking/register.html", {"username_error": message})
-        account = Account.objects.create(user=user)
+        account = Account.objects.create(user=user, account_type=account_type)
         account.save()
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
@@ -146,9 +147,12 @@ def download_transactions(request):
 def transfer_funds(request):
     account = Account.objects.get(user=request.user)
     if request.method == "POST":
-        receiving_account_number = request.POST.get(
+        receiver_account_number = request.POST.get(
             "receiverAccountNumber", None)
-        transfer_amount = request.POST.get("transferAmount", None)
+        transfer_amount = Decimal(request.POST.get("transferAmount", None))
+
+        if account.account_number == receiver_account_number:
+            return HttpResponse("Can't send money to yourself")
 
         if receiver_account_number != None and transfer_amount != None:
             # Check to see if user has enough money to send
@@ -158,14 +162,21 @@ def transfer_funds(request):
             # Check receiver's account number is a valid account
             try:
                 receiver = Account.objects.get(
-                    account=receiving_account_number)
+                    account_number=receiver_account_number)
+                receiver.balance += transfer_amount
+                account.balance -= transfer_amount
+                receiver.save()
+                account.save()
             except Account.DoesNotExist:
                 return HttpResponse("No users with that account number")
 
-            receiver.balance += transfer_amount
-            account.balance -= transfer_amount
-            receiver.save()
-            account.save()
+            # Add transactions to the respective users' accounts
+            receiver_transaction = Transactions.objects.create(
+                account=receiver, transactions=f"You have recieve ${transfer_amount} from {account.user.first_name.capitalize()}")
+            sender_transaction = Transactions.objects.create(
+                account=account, transactions=f"You sent ${transfer_amount} to {receiver.user.first_name.capitalize()}")
+            receiver_transaction.save()
+            sender_transaction.save()
             return HttpResponseRedirect(reverse("index"))
 
         elif receiver_account_number == None:

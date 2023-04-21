@@ -1,37 +1,62 @@
-{%extends 'banking/layout.html' %} {% block body %}
-
-<form id="transferForm" class="mt-4">
-  <div class="form-group">
-    <label for="senderAccountNumber">Sender Account Number:</label>
-    <input
-      type="text"
-      class="form-control"
-      id="senderAccountNumber"
-      name="senderAccountNumber"
-      placeholder="{{account.account_number}}"
-      readonly="readonly"
-      value="{{account.account_number}}"
-    />
+{% extends 'banking/layout.html' %} {% load static %} {% block body %}
+<form
+  id="transferForm"
+  action="{% url 'transfer' %}"
+  method="post"
+  class="transfer-form"
+>
+  {% csrf_token %}
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="senderAccountNumber">Sender Account Number:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="senderAccountNumber"
+        name="senderAccountNumber"
+        placeholder="{{account.account_number}}"
+        readonly="readonly"
+        value="{{account.account_number}}"
+      />
+    </div>
+    <div class="form-group col-md-6">
+      <label for="receiverAccountNumber">Receiver Account Number:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="receiverAccountNumber"
+        name="receiverAccountNumber"
+        placeholder="eg. AK04ZVUXLJ"
+        required
+      />
+    </div>
   </div>
-  <div class="form-group">
-    <label for="receiverAccountNumber">Receiver Account Number:</label>
-    <input
-      type="text"
-      class="form-control"
-      id="receiverAccountNumber"
-      name="receiverAccountNumber"
-    />
-  </div>
-  <div class="form-group">
-    <label for="transferAmount">Transfer Amount:</label>
-    <input
-      type="number"
-      class="form-control"
-      id="transferAmount"
-      name="transferAmount"
-      step="0.01"
-    />
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="transferAmount">Transfer Amount:</label>
+      <input
+        type="number"
+        class="form-control"
+        id="transferAmount"
+        name="transferAmount"
+        step="1.00"
+        required
+      />
+    </div>
+    <div class="form-group col-md-6">
+      <label for="transferDescription">Transfer Description:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="transferDescription"
+        name="transferDescription"
+        placeholder="(Optional)"
+      />
+    </div>
   </div>
   <button type="submit" class="btn btn-primary">Transfer</button>
 </form>
+{% endblock %} {% block script %}
+<script src="{% static 'banking/transfer/index.js'%}"></script>
+<link rel="stylesheet" href="{% static 'banking/transfer/style.css' %}" />
 {% endblock %}
