@@ -42,3 +42,9 @@ function toggleAccountNumber() {
 
   console.log(content);
 }
+
+
+function loadPage(){
+  
+  // Load investments in widget
+}
