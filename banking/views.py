@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 
 from .models import User, Account, Transactions
+from .functions import get_stocks
 
 # Create your views here.
 
@@ -57,9 +58,10 @@ def register(request):
 @login_required()
 def index(request):
     account = Account.objects.get(user=request.user)
+    stocks = get_stocks()
     transactions = Transactions.objects.filter(
         account=account).order_by('-timestamp')
-    return render(request, 'banking/homepage.html', {"account": account, "transactions": transactions})
+    return render(request, 'banking/homepage.html', {"account": account, "transactions": transactions, "stocks": stocks})
 
 
 @csrf_exempt

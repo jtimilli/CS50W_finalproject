@@ -1,5 +1,9 @@
+import requests
+from .secrets import api_key
+
+
 def get_stocks():
-    api_key = "xxxxxxxx"
+    api_key_value = api_key
     # Test stocks
     list_stocks = ["AAPL", "AM", "MSFT", "CGC", "MTTR", "OGI"]
     url = f"https://api.twelvedata.com/time_series?symbol={','.join(list_stocks)}&apikey={api_key}&interval=2h"
@@ -12,4 +16,4 @@ def get_stocks():
         if stock_values:
             latest_price = stock_values[0].get('close', '')
             stocks_data.append({'ticker': ticker, 'price': latest_price})
-    return print({'stocks_data': stocks_data})
+    return stocks_data
