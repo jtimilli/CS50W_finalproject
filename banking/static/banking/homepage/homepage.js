@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .querySelector("#account_number")
     .addEventListener("click", toggleAccountNumber);
+
+  loadStocks();
 });
 
 // Updates using account with amount deposited
@@ -37,14 +39,29 @@ function toggleAccountNumber() {
     this.innerText = account_number;
     setTimeout(() => {
       this.innerText = "**********";
-    }, 5000);
+    }, 3000);
   } else this.innerText = "**********";
 
   console.log(content);
 }
 
-
-function loadPage(){
-  
-  // Load investments in widget
+async function loadStocks() {
+  await fetch("userstocks/")
+    .then(response => response.json())
+    .then(data => {
+      const stocksTable = document.querySelector("#stocks-table-body");
+      stocksTable.innerHTML = "";
+      for (const stock of data) {
+        const row = document.createElement("tr");
+        const ticker = document.createElement("td");
+        ticker.textContent = stock.ticker;
+        const price = document.createElement("td");
+        price.textContent = `$${parseFloat(stock.price).toFixed(2)}`;
+        row.appendChild(ticker);
+        row.appendChild(price);
+        row.classList.add("fade-in");
+        stocksTable.appendChild(row);
+      }
+    })
+    .catch(error => console.error(error));
 }

@@ -53,22 +53,16 @@
 
       <!-- Widget #3 -->
       <div class="card shadow mb-5 bg-white rounded">
-        <div class="card-header"> <h3>Maybe investments</h3></div>
+        <div class="card-header"> <h3>Investments</h3></div>
         <div class="card-body p-2"> 
-          <table class="table table-hover">
+          <table class="table table-hover" id="stocks-table">
               <thead>
                   <tr>
                       <th>Ticker</th>
                       <th>Price</th>
                   </tr>
               </thead>
-              <tbody>
-                  {% for stock in stocks %}
-                  <tr>
-                      <td>{{ stock.ticker }}</td>
-                      <td>{{ stock.price }}</td>
-                  </tr>
-                  {% endfor %}
+              <tbody id="stocks-table-body">
               </tbody>
           </table>
        </div>
