@@ -1,19 +1,30 @@
 import requests
+
 from .secrets import api_key
+from django.http import JsonResponse
 
 
-def get_stocks():
-    api_key_value = api_key
-    # Test stocks
-    list_stocks = ["AAPL", "AM", "MSFT", "CGC", "MTTR", "OGI"]
-    url = f"https://api.twelvedata.com/time_series?symbol={','.join(list_stocks)}&apikey={api_key}&interval=2h"
-    response = requests.get(url).json()
-    stocks_data = []
+def searchStock(symbol):
+    try:
+        api_key_value = api_key
 
-    # For each ticker, get that object and it's value from the response add new object to array, return array
-    for ticker in list_stocks:
-        stock_values = response.get(ticker, {}).get('values', [])
-        if stock_values:
-            latest_price = stock_values[0].get('close', '')
-            stocks_data.append({'ticker': ticker, 'price': latest_price})
-    return stocks_data
+        # Call API
+        url = f"https://api.twelvedata.com/time_series?symbol={symbol}&interval=1min&apikey={api_key}"
+
+        #
+        response = requests.get(url).json()
+        data = response['meta']
+
+        if response.get("status") == 'ok':
+            stock = {}
+            latest_price = '%.2f' % float(response["values"][0]["close"])
+            stock["currency"] = data["currency"]
+            stock["price"] = latest_price
+            stock["symbol"] = data["symbol"]
+            stock["type"] = data["type"]
+            stock["exchange"] = data["exchange"]
+            return {"status": 200, "data": stock}
+        elif response.get("code") == 400:
+            return {"status": 400, "error": "No symbol with that ticker try again"}
+    except Exception as e:
+        return {"status": 500, "error": str(e)}

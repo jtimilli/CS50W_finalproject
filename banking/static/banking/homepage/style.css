@@ -120,7 +120,8 @@ footer {
   margin-bottom: 5px;
 }
 
-.list-group {
+.list-group,
+tbody {
   height: 250px;
   max-height: 250px;
   margin-bottom: 10px;
@@ -130,4 +131,19 @@ footer {
 
 .card {
   width: 400px;
+  height: 500px;
+}
+
+tr {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

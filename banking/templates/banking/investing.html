@@ -1,0 +1,113 @@
+{% extends 'banking/layout.html' %} {% load static %} {% block body %}
+<div id="app"></div>
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/babel">
+  
+function Stock(props) {
+  return (
+    <div className="current-stock animate__animated animate__fadeIn">
+      <div>Name: {props.data.symbol}</div>
+      <div>Price: {props.data.price}</div>
+      <div>Currency {props.data.currency}</div>
+      <div>Type: {props.data.type}</div>
+    </div>
+  )
+}
+
+
+
+function App() {
+  const [stocks, setAllStocks] = React.useState(null);
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [currentStock, setCurrentStock] = React.useState(null)
+
+
+  const matchingStocks = React.useMemo(() => {
+  if (!stocks) return [];
+  return stocks.filter((stock) => {
+    const searchTermLower = searchTerm.toLowerCase();
+    return (
+      stock.symbol.toLowerCase().includes(searchTermLower)
+    );
+  }).slice(0, 10);
+}, [searchTerm, stocks]);
+
+
+
+    const renderStock = (symbol) => {
+     fetch(`/stock_info/${symbol}`).then(response => response.json().then(
+     data => { setSearchTerm("");
+                setCurrentStock(data); 
+                console.log(data) }
+     )
+     )}
+    
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = "https://api.twelvedata.com/stocks";
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const filtered = data['data'].filter(stock => stock.exchange ==  "NASDAQ")
+        setAllStocks(filtered);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
+  return (
+    <div className="container">
+      <div className="search-container">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search"
+        />
+        <ul className="list-of-stocks list-group">
+          {searchTerm &&
+            matchingStocks.map((stock) => (
+              <li className="list-group-item" onClick={() => renderStock(stock.symbol)} key={stock.symbol}>
+                {stock.name} ({stock.symbol})
+                </li>
+                ))}
+          </ul>
+        </div>
+
+       { currentStock && <Stock data={currentStock}/>}
+
+
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.querySelector("#app"));
+</script>
+
+{% endblock %}
+
+
+<div>
+    {% block script %}   <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script></script>
+    <link href="{% static 'banking/investing/style.css' %}" rel="stylesheet" />
+    {% endblock %}
+</div>

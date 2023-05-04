@@ -9,11 +9,12 @@ urlpatterns = [
     path("logout/", views.logout_user, name="logout"),
     path("loans/", views.loans, name="loans"),
     path("transfer/", views.transfer_funds, name="transfer"),
+    path("invest/", views.load_investPage, name="invest_page"),
 
     # APIs
-
+    path("stock_info/<str:symbol>/", views.load_stock, name="stock_info"),
     path("deposit/", views.deposit, name="deposit"),
+    path("userstocks/", views.loadUserStock, name="userstock"),
     path("download_csv/", views.download_transactions, name="download_csv")
-
 
 ]

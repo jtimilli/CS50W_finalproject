@@ -1,4 +1,5 @@
 import csv
+import requests
 import json
 from django.shortcuts import render
 from django.db import IntegrityError
@@ -10,7 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 
 from .models import User, Account, Transactions
-from .functions import get_stocks
+from .secrets import api_key
+from .functions import searchStock
 
 # Create your views here.
 
@@ -58,10 +60,10 @@ def register(request):
 @login_required()
 def index(request):
     account = Account.objects.get(user=request.user)
-    stocks = get_stocks()
+    # stocks = get_stocks()
     transactions = Transactions.objects.filter(
         account=account).order_by('-timestamp')
-    return render(request, 'banking/homepage.html', {"account": account, "transactions": transactions, "stocks": stocks})
+    return render(request, 'banking/homepage.html', {"account": account, "transactions": transactions})
 
 
 @csrf_exempt
@@ -188,3 +190,34 @@ def transfer_funds(request):
 
     else:
         return render(request, "banking/transfer.html", {"account": account})
+
+
+def load_investPage(request):
+    return render(request, "banking/investing.html")
+
+
+def loadUserStock(request):
+    api_key_value = api_key
+    # Test stocks
+    list_stocks = ["AAPL", "AM", "MSFT", "MTTR"]
+
+    # Call API
+    url = f"https://api.twelvedata.com/time_series?symbol={','.join(list_stocks)}&apikey={api_key}&interval=2h"
+    response = requests.get(url).json()
+    stocks_data = []
+
+    # For each ticker, get that object and it's value from the response add new object to array, return array
+    for ticker in list_stocks:
+        stock_values = response.get(ticker, {}).get('values', [])
+        if stock_values:
+            latest_price = stock_values[0].get('close', '')
+            stocks_data.append({'ticker': ticker, 'price': latest_price})
+    return JsonResponse(stocks_data, safe=False)
+
+
+def load_stock(request, symbol):
+    response = searchStock(symbol)
+    if response["status"] == 200:
+        return JsonResponse(response["data"], status=response["status"], safe=False)
+    else:
+        return JsonResponse({"Error": response["error"]}, status=response["status"])
