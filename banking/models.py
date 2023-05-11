@@ -35,3 +35,9 @@ class Transactions(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     transactions = models.CharField(max_length=64, null=True)
     timestamp = models.DateTimeField(auto_now=True)
+
+
+class StockPortfolio(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    stock = models.CharField(max_length=10, unique=True)
+    quantity = models.IntegerField()
