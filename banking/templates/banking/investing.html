@@ -5,24 +5,54 @@
 
 
 
-
-
-
-
-
-
 <script type="text/babel">
   
-function Stock(props) {
-  return (
-    <div className="current-stock animate__animated animate__fadeIn">
-      <div>Name: {props.data.symbol}</div>
-      <div>Price: {props.data.price}</div>
-      <div>Currency {props.data.currency}</div>
-      <div>Type: {props.data.type}</div>
-    </div>
-  )
-}
+
+
+  const tradeStock = (trade, stock, quantity) => {
+  const apiUrl = "/trade/";
+  // make sure that the trade parameter is either "buy" or "sell"
+  if (trade !== "buy" && trade !== "sell") {
+    console.error(`Invalid trade type: ${trade}`);
+    return;
+  }
+
+  // create an object to store the data to send to the API
+  const tradeData = {
+    type: trade,
+    symbol: stock.symbol,
+    price: stock.price,
+    quantity: quantity // assuming 1 share for now
+  };
+
+  // Send the trade data to the API
+  fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(tradeData)
+  })
+    .then(response =>
+       response.json())
+    .then(data => {
+      // handle the response from the API
+      console.log(data);
+      if (data.error) {
+        alert(`Error: ${data.error}`);
+      } else {
+        alert(`Success: ${data.success}`);
+      }
+    })
+    .catch(error => {
+      console.error(`Error executing ${trade} trade for ${stock.symbol}: ${error}`);
+      alert(`Error executing ${trade} trade for ${stock.symbol}`);
+    });
+};
+
+
+
+
 
 
 
@@ -30,6 +60,69 @@ function App() {
   const [stocks, setAllStocks] = React.useState(null);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [currentStock, setCurrentStock] = React.useState(null)
+  const [showModel, setShowModel] = React.useState(false)
+
+
+
+//Modal pop-up to buy or sell stock
+const Modal = props => {
+
+  // Keeps track of quantity user enters
+  const [quantity, setQuantity] = React.useState(0)
+
+  // Destructure props
+  const {show, stock, closeModel} = props
+  
+if (!show) {
+  return null
+}
+
+
+return (
+  <div className="modal">
+    <div className="modal-content">  
+      <div className="modal-header">
+        <h4> Buy or Sell Stocks</h4>
+        <button className="button" onClick={() => closeModel(false)}> x </button>
+      </div>
+
+        <div className="modal-body"> 
+          `How much of {stock.symbol} would you like to Buy/Sell`
+          <input type="number" placeholder="Enter number of stocks" min="1" autofocus onChange={(e) => {setQuantity(e.target.value)} }/>
+          </div>
+          <div className="modal-footer"> 
+            
+            <button className="button btn-danger" onClick={() => tradeStock("sell", stock, quantity)}> Sell</button>
+            <button className="button btn-success" onClick={() => tradeStock("buy",stock, quantity )}> Buy</button>
+      </div>
+      </div>
+
+    </div>
+
+)
+}
+
+
+// stock component
+const Stock = props => {
+const {symbol, currency, price, type} = props.data 
+
+return (
+  <div className="current-stock animate__animated animate__fadeIn">
+    <div className="row justify-content-md-center stock-info">
+      <div className="">
+        <div className="col-6">{symbol}</div>
+        <div className="col-6">{currency}   US${price}</div>
+      </div>
+      <div>Type: {type}</div>   
+    </div>
+
+    <div className="">
+      <button className="buy-button btn btn-success m-1"   onClick={() => setShowModel(true)}>Trade</button>
+    </div>
+    </div>
+    )
+}
 
 
   const matchingStocks = React.useMemo(() => {
@@ -61,6 +154,7 @@ function App() {
         const data = await response.json();
 
         const filtered = data['data'].filter(stock => stock.exchange ==  "NASDAQ")
+        console.log(filtered)
         setAllStocks(filtered);
       } catch (error) {
         console.log(error);
@@ -73,25 +167,32 @@ function App() {
 
 
   return (
-    <div className="container">
-      <div className="search-container">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search"
-        />
-        <ul className="list-of-stocks list-group">
-          {searchTerm &&
-            matchingStocks.map((stock) => (
-              <li className="list-group-item" onClick={() => renderStock(stock.symbol)} key={stock.symbol}>
-                {stock.name} ({stock.symbol})
-                </li>
-                ))}
-          </ul>
-        </div>
+    <div className="container-fluid">
+      <section className="section-1 col-12">
+        <div className="search-container">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          <ul className="list-of-stocks list-group">
+            {searchTerm &&
+              matchingStocks.map((stock) => (
+                <li className="list-group-item" onClick={() => renderStock(stock.symbol)} key={stock.symbol}>
+                  {stock.name} ({stock.symbol})
+                  </li>
+                  ))}
+            </ul>
 
-       { currentStock && <Stock data={currentStock}/>}
+            <Modal show={showModel} closeModel={setShowModel} stock={currentStock}/>
+
+          </div>
+      </section>
+<section className="section-2 col-12">
+  
+         { currentStock && <Stock data={currentStock}/>}
+</section>
 
 
     </div>

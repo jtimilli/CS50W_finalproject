@@ -8,9 +8,10 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
+
 from decimal import Decimal
 
-from .models import User, Account, Transactions
+from .models import User, Account, Transactions, StockPortfolio
 from .secrets import api_key
 from .functions import searchStock
 
@@ -195,6 +196,8 @@ def transfer_funds(request):
 def load_investPage(request):
     return render(request, "banking/investing.html")
 
+# TODO: Replace test data with queryset from user's portfolio
+
 
 def loadUserStock(request):
     api_key_value = api_key
@@ -215,9 +218,67 @@ def loadUserStock(request):
     return JsonResponse(stocks_data, safe=False)
 
 
-def load_stock(request, symbol):
+def loadStock(request, symbol):
     response = searchStock(symbol)
     if response["status"] == 200:
         return JsonResponse(response["data"], status=response["status"], safe=False)
     else:
         return JsonResponse({"Error": response["error"]}, status=response["status"])
+
+
+@csrf_exempt
+def tradeStocks(request):
+    if request.method == "POST":
+        user = request.user
+        account = Account.objects.get(user=user)
+        data = json.loads(request.body)
+
+        quantity, trade_type, symbol, price = Decimal(
+            data["quantity"]), data["type"], data["symbol"], Decimal((data["price"]))
+
+        # Try getting user's portfolio
+        try:
+            users_portfolio = StockPortfolio.objects.get(
+                account=account, stock=symbol)
+        except StockPortfolio.DoesNotExist:
+            users_portfolio = None
+
+        # Handle buying the stock
+        if trade_type == "buy":
+            cost = quantity * price
+
+            if Decimal(account.balance - cost) < 0:
+                return JsonResponse({"error": f"Your balance ({account.balance}) is not enough to make this trade"}, status=400)
+
+            # If user does not own any of the stock
+            if users_portfolio == None:
+                users_portfolio = StockPortfolio.objects.create(
+                    account=account, stock=symbol, quantity=quantity)
+            else:
+                users_portfolio.quantity = users_portfolio.quantity + quantity
+
+            users_portfolio.save()
+            account.balance = account.balance - cost
+            account.save()
+            return JsonResponse({"success": "You have successfully purchased stock"}, status=200)
+
+        # Handle selling the stock
+        if trade_type == "sell":
+            if users_portfolio == None:
+                return JsonResponse({"error": "You don't own any of this stock to sell"}, status=200)
+
+            if users_portfolio.quantity < quantity:
+                return JsonResponse({"error": "You can't sell more stocks than you own"}, status=200)
+
+            price = quantity * price
+            account.balance = account.balance + price
+            users_portfolio.quantity = users_portfolio.quantity - quantity
+            users_portfolio.save()
+
+            if users_portfolio.quantity == 0:
+                users_portfolio.delete()
+
+            account.save()
+            return JsonResponse({"success": "You successfully sold the stock"}, status=200)
+
+    return JsonResponse({"error": "Invalid request"}, status=200)
