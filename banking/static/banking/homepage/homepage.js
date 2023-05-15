@@ -41,8 +41,6 @@ function toggleAccountNumber() {
       this.innerText = "**********";
     }, 3000);
   } else this.innerText = "**********";
-
-  console.log(content);
 }
 
 async function loadStocks() {
@@ -57,8 +55,17 @@ async function loadStocks() {
         ticker.textContent = stock.ticker;
         const price = document.createElement("td");
         price.textContent = `$${parseFloat(stock.price).toFixed(2)}`;
+        const quantity = document.createElement("td");
+        quantity.textContent = stock.quantity;
+        const current_valiue = document.createElement("td");
+        current_valiue.textContent = `$${parseFloat(
+          stock.price * stock.quantity
+        ).toFixed(2)}`;
+
         row.appendChild(ticker);
         row.appendChild(price);
+        row.appendChild(quantity);
+        row.appendChild(current_valiue);
         row.classList.add("fade-in");
         stocksTable.appendChild(row);
       }

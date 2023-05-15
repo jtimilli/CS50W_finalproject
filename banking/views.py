@@ -149,6 +149,7 @@ def download_transactions(request):
     return response
 
 
+# TODO: Add js on client side to handle error checking
 def transfer_funds(request):
     account = Account.objects.get(user=request.user)
     if request.method == "POST":
@@ -200,21 +201,41 @@ def load_investPage(request):
 
 
 def loadUserStock(request):
+    account = Account.objects.get(user=request.user)
     api_key_value = api_key
-    # Test stocks
-    list_stocks = ["AAPL", "AM", "MSFT", "MTTR"]
+
+    try:
+        list_stocks = StockPortfolio.objects.filter(account=account)
+        list_stocks = [obj.stock for obj in list_stocks]
+        if len(list_stocks) > 1:
+            symbols = ','.join(list_stocks)
+        else:
+            symbols = list_stocks[0]
+    except StockPortfolio.DoesNotExist:
+        symbols = ""
 
     # Call API
-    url = f"https://api.twelvedata.com/time_series?symbol={','.join(list_stocks)}&apikey={api_key}&interval=2h"
+    url = f"https://api.twelvedata.com/time_series?symbol={symbols}&apikey={api_key}&interval=1min"
     response = requests.get(url).json()
     stocks_data = []
 
-    # For each ticker, get that object and it's value from the response add new object to array, return array
-    for ticker in list_stocks:
-        stock_values = response.get(ticker, {}).get('values', [])
-        if stock_values:
-            latest_price = stock_values[0].get('close', '')
-            stocks_data.append({'ticker': ticker, 'price': latest_price})
+    # If user owns only one stock
+    if ',' not in symbols:
+        lastest_price = response.get('values', [])[0].get('close', {})
+        quantity = StockPortfolio.objects.get(
+            account=account, stock=symbols).quantity
+        stocks_data.append({'ticker': list_stocks, 'price': lastest_price, })
+
+    else:
+        # For each ticker, get that object and it's value from the response add new object to array, return array
+        for ticker in list_stocks:
+            stock_values = response.get(ticker, {}).get('values', [])
+            if stock_values:
+                latest_price = stock_values[0].get('close', '')
+                quantity = StockPortfolio.objects.get(
+                    account=account, stock=ticker).quantity
+                stocks_data.append(
+                    {'ticker': ticker, 'price': latest_price, "quantity": quantity})
     return JsonResponse(stocks_data, safe=False)
 
 
@@ -224,6 +245,8 @@ def loadStock(request, symbol):
         return JsonResponse(response["data"], status=response["status"], safe=False)
     else:
         return JsonResponse({"Error": response["error"]}, status=response["status"])
+
+# TODO: Add Transations for each buy or selling of stock
 
 
 @csrf_exempt
@@ -248,7 +271,7 @@ def tradeStocks(request):
             cost = quantity * price
 
             if Decimal(account.balance - cost) < 0:
-                return JsonResponse({"error": f"Your balance ({account.balance}) is not enough to make this trade"}, status=400)
+                return JsonResponse({"error": f"Your balance of ${account.balance} is not enough to make this trade (${cost})"}, status=400)
 
             # If user does not own any of the stock
             if users_portfolio == None:
@@ -257,6 +280,11 @@ def tradeStocks(request):
             else:
                 users_portfolio.quantity = users_portfolio.quantity + quantity
 
+            # Add transaction
+            user_transaction = Transactions.objects.create(
+                account=account, transactions=f"Purchased {quantity} {symbol} stock(s) @ ${price} each")
+
+            user_transaction.save()
             users_portfolio.save()
             account.balance = account.balance - cost
             account.save()
@@ -270,14 +298,19 @@ def tradeStocks(request):
             if users_portfolio.quantity < quantity:
                 return JsonResponse({"error": "You can't sell more stocks than you own"}, status=200)
 
-            price = quantity * price
-            account.balance = account.balance + price
+            cost = quantity * price
+            account.balance = account.balance + cost
             users_portfolio.quantity = users_portfolio.quantity - quantity
             users_portfolio.save()
 
             if users_portfolio.quantity == 0:
                 users_portfolio.delete()
 
+             # Add transaction
+            user_transaction = Transactions.objects.create(
+                account=account, transactions=f"Sold {quantity} {symbol} stock(s) @ ${price} each")
+
+            user_transaction.save()
             account.save()
             return JsonResponse({"success": "You successfully sold the stock"}, status=200)
 
