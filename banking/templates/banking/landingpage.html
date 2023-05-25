@@ -8,38 +8,52 @@
       clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 95%);
     "
   >
+    <!-- left side -->
     <div
-      class="col-6 border text-wrap d-flex flex-column ps-5"
+      class="col-6 text-wrap d-flex flex-column ps-5"
       style="padding-left: 10%"
     >
-      <div style="width: 100%" class="border">
+      <div style="width: 100%" class="">
         <strong style="font-family: 'Open Sans', sans-serif; font-size: 40px">
           Save, invest, transfer money made easy
         </strong>
       </div>
-      <div
-        class="border mt-4"
-        style="font-family: 'Instrument Sans', sans-serif"
-      >
+      <div class="mt-4" style="font-family: 'Instrument Sans', sans-serif">
         Experience seamless financial management with our user-friendly app,
         simplifying saving, investing, and money transfers
       </div>
-      <div class="d-flex flex-row border mt-4">
-        <div class="">
-          <button
-            type="button"
-            class="btn rounded-5 h-100 w-auto ms-3"
-            style="background-color: black; color: white; font-size: x-small"
-          >
-            Free trial
-          </button>
-        </div>
-        <div>
-          <button type="button" class="btn rounded-5">Sign up</button>
-        </div>
+      <div
+        class="d-flex flex-row justify-content-around mt-4"
+        style="height: 11%"
+      >
+        <button
+          type="button"
+          class="btn btn-large rounded-pill h-100 ms-3"
+          style="
+            background-color: #efbd42;
+            color: black;
+            font-size: medium;
+            width: 50%;
+          "
+        >
+          Free trial
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-large rounded-5"
+          style="width: 50%"
+        >
+          Sign up
+        </button>
       </div>
     </div>
-    <div class="col-6 border me-3" style="padding-right: 5%">
+
+    <!-- right side -->
+    <div
+      class="col-6 me-3"
+      style="padding-right: 5%; border-left: gray solid 0.5px"
+    >
       <div class="h-100">
         <img
           src="{% static 'banking/images/save-money.png' %}"
@@ -51,20 +65,24 @@
   </div>
 
   <!-- section 2 -->
-  <div class="row d-flex flex-row my-5 p-5" style="background-color: #99a98f">
+  <div class="row d-flex flex-row mt-5 p-5" style="background-color: #99a98f">
     <div
       class="card col-4"
       style="width: 18rem; background: none !important; border: none"
     >
-      <img
-        src="{% static 'banking/images/money-back.png'%}"
-        class="card-img-top"
-        alt="hand exchange"
-      />
+      <div class="p-5">
+        <img
+          src="{% static 'banking/images/money-back.png'%}"
+          class="card-img-top"
+          alt="hand exchange"
+        />
+      </div>
+
       <div
-        class="card-body bg-light rounded-end-circle"
+        class="card-body bg-light rounded-4"
         style="
-          margin-top: 13px;
+          margin-top: ddddd;
+          background-color: #d6e8db !important;
           box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
             rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
             rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px !important;
@@ -72,8 +90,10 @@
         "
       >
         <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+          Experience hassle-free and instant money transfers to your friends and
+          family, completely free of cost. Seamlessly send funds using just
+          their account number, making it quick and convenient to support your
+          loved ones.
         </p>
       </div>
     </div>
@@ -87,7 +107,7 @@
         alt="hand exchange"
       />
       <div
-        class="card-body bg-light rounded-pill"
+        class="card-body bg-light rounded"
         style="
           margin-top: 13px;
           box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
@@ -96,9 +116,11 @@
           font-family: 'Instrument Sans', sans-serif;
         "
       >
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+        <p class="card-text my-auto text-wrap">
+          Enjoy peace of mind as you securely deposit your funds into your
+          account, knowing that it's safe and protected. With our banking app,
+          there are no monthly fees, allowing you to manage your finances
+          without any additional costs or worries.
         </p>
       </div>
     </div>
@@ -106,15 +128,18 @@
       class="card col-4"
       style="width: 18rem; background: none !important; border: none"
     >
-      <img
-        src="{% static 'banking/images/invest.png'%}"
-        class="card-img-top"
-        alt="hand exchange"
-      />
+      <div class="p-1d">
+        <img
+          src="{% static 'banking/images/invest.png'%}"
+          class="card-img-top"
+          alt="hand exchange"
+        />
+      </div>
       <div
         class="card-body bg-light rounded"
         style="
           margin-top: 13px;
+          background-color: #d6e8db !important;
           box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
             rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
             rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px !important;
@@ -131,12 +156,12 @@
 
   <!-- section 3 -->
   <div
-    class="col-12 border text-wrap align-bottom h-3 d-flex flex-column p-0"
-    style="font-size: small; font-weight: 100; font-style: italic"
+    class="row border text-wrap p-2"
+    style="font-weight: 100; font-style: italic; background-color: white"
   >
     <div
-      class="h-20 mt-auto mb-0 p-0"
-      style="background-color: grey; margin: 0; color: white"
+      class="col h-20 mb-0 p-0"
+      style="margin: 0; color: black; font-family: serif; font-size: medium"
     >
       Please note that our bare bone banking app focuses on providing the
       essential features without advanced security measures. As a result, we
