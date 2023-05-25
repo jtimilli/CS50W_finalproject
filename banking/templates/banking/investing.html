@@ -48,7 +48,7 @@
           setTimeout(() => setErrorMessage(""), 4000)
         } else {
         
-          setErrorMessage(`Success: ${data.success}`)
+          setSuccessMessage(`Success: ${data.success}`)
         
           setTimeout(() =>  {setShowModel(false),   setCurrentStock(null)}, 2000)
          
@@ -109,16 +109,18 @@ const Stock = props => {
 const {symbol, currency, price, type} = props.data 
 
 return (
-  <div className="current-stock animate__animated animate__fadeIn">
-    <div className="row justify-content-md-center stock-info">
-      <div className="">
+  <div className="card current-stock animate__animated animate__fadeIn">
+    <div className="card-content">
+      <div className="card-header">
         <div className="col-6">{symbol}</div>
-        <div className="col-6">{currency}   US${price}</div>
-      </div>
-      <div>Type: {type}</div>   
+        </div>
+        <div className="card-body">
+          <div className="col-6">{currency}   US${price}</div>
+          <div>Type: {type}</div>   
+        </div>
     </div>
 
-    <div className="">
+    <div className="card-footer">
       <button className="buy-button btn btn-success m-1"   onClick={() => setShowModel(true)}>Trade</button>
     </div>
     </div>
@@ -176,6 +178,7 @@ return (
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
+            placeholder="Search stocks here"
           />
           <ul className="list-of-stocks list-group">
             {searchTerm &&

@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  background-color: #fff8de;
 }
 
 .navbar {
@@ -8,9 +9,10 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  background-color: #333;
   color: white;
   padding: 0 20px;
+  z-index: 999;
+  background-color: #fff8de;
 }
 
 .navbar-logo {
@@ -87,4 +89,8 @@ body {
     width: 100%;
     background-color: #333;
   }
+}
+
+a {
+  color: black;
 }

@@ -10,10 +10,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 
 from decimal import Decimal
+from django.utils.timezone import localtime
 
 from .models import User, Account, Transactions, StockPortfolio
 from .secrets import api_key
-from .functions import searchStock
+from .functions import searchStock, searchAccount
 
 # Create your views here.
 
@@ -58,6 +59,10 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
 
 
+def load_landing(request):
+    return render(request, 'banking/landingpage.html')
+
+
 @login_required()
 def index(request):
     account = Account.objects.get(user=request.user)
@@ -70,7 +75,6 @@ def index(request):
 @csrf_exempt
 def login_user(request):
     if request.method == "POST":
-
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
@@ -85,6 +89,8 @@ def login_user(request):
                 "message": "Invalid username and/or password."
             })
     else:
+        if request.user.is_authenticated:
+            return HttpResponseRedirect('/')
         return render(request, "banking/login.html")
 
 
@@ -126,7 +132,8 @@ def loans(request):
 
 def download_transactions(request):
     account = Account.objects.get(user=request.user)
-    transactions = Transactions.objects.filter(account=account)
+    transactions = Transactions.objects.filter(
+        account=account).order_by("-timestamp")
 
     # Create CSV file
     response = HttpResponse(content_type="text/csv")
@@ -134,27 +141,28 @@ def download_transactions(request):
 
     # Define fieldnames for CSV
     fieldnames = ['transaction_date',
-                  'transaction_amount']  # Example fieldnames
+                  'transaction']  # Example fieldnames
 
     # Write transactions to CSV
     writer = csv.DictWriter(response, fieldnames=fieldnames)
     writer.writeheader()  # Write CSV header row
     for transaction in transactions:
+        formatted_timestamp = localtime(
+            transaction.timestamp).strftime('%Y-%m-%d %H:%M')
         writer.writerow({
-            'transaction_date': transaction.timestamp,
-            'transaction_amount': transaction.transactions
+            'transaction_date': formatted_timestamp,
+            'transaction': transaction.transactions
 
         })
 
     return response
 
 
-# TODO: Add js on client side to handle error checking
 def transfer_funds(request):
     account = Account.objects.get(user=request.user)
     if request.method == "POST":
         receiver_account_number = request.POST.get(
-            "receiverAccountNumber", None)
+            "receiverAccountNumber", None).upper()
         transfer_amount = Decimal(request.POST.get("transferAmount", None))
 
         if account.account_number == receiver_account_number:
@@ -194,6 +202,19 @@ def transfer_funds(request):
         return render(request, "banking/transfer.html", {"account": account})
 
 
+@csrf_exempt
+def checkForReceiver(request):
+    if request.method == "POST":
+        account = json.loads(request.body)['accountNumber'].lower()
+        list_account = Account.objects.all().order_by("account_number")
+        print(list_account)
+        is_account = searchAccount(list_account, account)
+        if is_account:
+            return JsonResponse({"found": "account active"})
+        else:
+            return JsonResponse({"error": "No account with that number"})
+
+
 def load_investPage(request):
     return render(request, "banking/investing.html")
 
@@ -207,10 +228,13 @@ def loadUserStock(request):
     try:
         list_stocks = StockPortfolio.objects.filter(account=account)
         list_stocks = [obj.stock for obj in list_stocks]
+        if len(list_stocks) == 0:
+            return JsonResponse({}, safe=False)
         if len(list_stocks) > 1:
             symbols = ','.join(list_stocks)
         else:
-            symbols = list_stocks[0]
+            print(list_stocks)
+            symbols = list_stocks[0] if list_stocks else []
     except StockPortfolio.DoesNotExist:
         symbols = ""
 
@@ -246,7 +270,7 @@ def loadStock(request, symbol):
     else:
         return JsonResponse({"Error": response["error"]}, status=response["status"])
 
-# TODO: Add Transations for each buy or selling of stock
+# TODO:
 
 
 @csrf_exempt

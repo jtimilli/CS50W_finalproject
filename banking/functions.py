@@ -28,3 +28,19 @@ def searchStock(symbol):
             return {"status": 400, "error": "No symbol with that ticker try again"}
     except Exception as e:
         return {"status": 500, "error": str(e)}
+
+
+def searchAccount(array, account):
+    start = 0
+    end = len(array) - 1
+
+    while start <= end:
+        mid = (start + end) // 2
+        if array[mid].account_number.lower() == account:
+            return True
+        elif array[mid].account_number.lower() < account:
+            start = mid + 1
+        else:
+            end = mid - 1
+
+    return False

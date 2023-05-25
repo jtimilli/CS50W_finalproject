@@ -6,3 +6,9 @@
   background-color: #f8f9fa; /* Set desired background color */
   border-radius: 5px; /* Add border radius for rounded corners */
 }
+
+.success {
+  border-color: green !important;
+  box-shadow: 0 0 5px green !important;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
