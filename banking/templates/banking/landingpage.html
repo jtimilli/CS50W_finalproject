@@ -1,5 +1,6 @@
 {% extends 'banking/layout.html' %} {% load static %}{% block body %}
 <div class="container-fluid vw-100 vh-100">
+  <!-- section 1 -->
   <div
     class="row mt-5"
     style="
@@ -48,53 +49,98 @@
       </div>
     </div>
   </div>
-  <div class="row d-flex" style="background-color: #99a98f">
-    <div class="col-12 h-80 d-flex flex-row justify-content-around my-5">
-      <div class="card rounded-5 rounded-bottom-0" style="width: 18rem">
-        <img src="..." class="card-img-top" alt="..." />
-        <div class="card-body">
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-        </div>
-      </div>
-      <div class="card" style="width: 18rem">
-        <img
-          src="{% static 'banking/images/distribute (1).png'%}"
-          class="card-img-top"
-          alt="hand exchange"
-        />
-        <div class="card-body">
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-        </div>
-      </div>
-      <div class="card" style="width: 18rem">
-        <img src="..." class="card-img-top" alt="..." />
-        <div class="card-body">
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-        </div>
+
+  <!-- section 2 -->
+  <div class="row d-flex flex-row my-5 p-5" style="background-color: #99a98f">
+    <div
+      class="card col-4"
+      style="width: 18rem; background: none !important; border: none"
+    >
+      <img
+        src="{% static 'banking/images/money-back.png'%}"
+        class="card-img-top"
+        alt="hand exchange"
+      />
+      <div
+        class="card-body bg-light rounded-end-circle"
+        style="
+          margin-top: 13px;
+          box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+            rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+            rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px !important;
+          font-family: 'Instrument Sans', sans-serif;
+        "
+      >
+        <p class="card-text">
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </p>
       </div>
     </div>
     <div
-      class="col-12 border text-wrap align-bottom h-3 d-flex flex-column p-0"
-      style="font-size: small; font-weight: 100; font-style: italic"
+      class="card col-4"
+      style="width: 18rem; background: none !important; border: none"
     >
+      <img
+        src="{% static 'banking/images/finance.png'%}"
+        class="card-img-top"
+        alt="hand exchange"
+      />
       <div
-        class="h-20 mt-auto mb-0 p-0"
-        style="background-color: grey; margin: 0; color: white"
+        class="card-body bg-light rounded-pill"
+        style="
+          margin-top: 13px;
+          box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+            rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+            rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px !important;
+          font-family: 'Instrument Sans', sans-serif;
+        "
       >
-        Please note that our bare bone banking app focuses on providing the
-        essential features without advanced security measures. As a result, we
-        recommend using this app for personal or non-sensitive transactions
-        only.
+        <p class="card-text">
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </p>
       </div>
+    </div>
+    <div
+      class="card col-4"
+      style="width: 18rem; background: none !important; border: none"
+    >
+      <img
+        src="{% static 'banking/images/invest.png'%}"
+        class="card-img-top"
+        alt="hand exchange"
+      />
+      <div
+        class="card-body bg-light rounded"
+        style="
+          margin-top: 13px;
+          box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+            rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+            rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px !important;
+          font-family: 'Instrument Sans', sans-serif;
+        "
+      >
+        <p class="card-text">
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- section 3 -->
+  <div
+    class="col-12 border text-wrap align-bottom h-3 d-flex flex-column p-0"
+    style="font-size: small; font-weight: 100; font-style: italic"
+  >
+    <div
+      class="h-20 mt-auto mb-0 p-0"
+      style="background-color: grey; margin: 0; color: white"
+    >
+      Please note that our bare bone banking app focuses on providing the
+      essential features without advanced security measures. As a result, we
+      recommend using this app for personal or non-sensitive transactions only.
     </div>
   </div>
 </div>
