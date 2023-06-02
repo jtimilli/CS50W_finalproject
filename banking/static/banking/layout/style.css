@@ -9,7 +9,7 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  color: white;
+  color: black;
   padding: 0 20px;
   z-index: 999;
   background-color: #fff8de;
@@ -25,10 +25,15 @@ body {
 }
 
 .navbar-menu-item {
-  color: white;
+  color: black;
   text-decoration: none;
   padding: 10px;
   margin-right: 10px;
+}
+
+.navbar-menu-item:hover {
+  text-decoration: none;
+  color: #99a98f;
 }
 
 .navbar-hamburger {

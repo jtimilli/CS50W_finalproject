@@ -39,5 +39,5 @@ class Transactions(models.Model):
 
 class StockPortfolio(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    stock = models.CharField(max_length=10, unique=True)
+    stock = models.CharField(max_length=10)
     quantity = models.IntegerField()

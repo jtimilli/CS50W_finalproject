@@ -248,7 +248,8 @@ def loadUserStock(request):
         lastest_price = response.get('values', [])[0].get('close', {})
         quantity = StockPortfolio.objects.get(
             account=account, stock=symbols).quantity
-        stocks_data.append({'ticker': list_stocks, 'price': lastest_price, })
+        stocks_data.append(
+            {'ticker': list_stocks, 'price': lastest_price, "quantity": quantity})
 
     else:
         # For each ticker, get that object and it's value from the response add new object to array, return array

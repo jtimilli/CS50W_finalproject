@@ -1,58 +1,72 @@
 {% extends 'banking/layout.html'%} {% load static %} {% block body %}
-<div>{% block title %} Sign up {% endblock %}</div>
-<div class="body">
-  <h2 sty1e="margin: 0 auto">Sign up</h2>
-  <form method="post" action="{% url 'register'%}">
-    <div>
-      <label>First name </label>
-      <input type="text" placeholder="Your first name.. " name="first_name" />
-    </div>
-    <div>
-      <label>Last name </label>
-      <input type="text" placeholder="Your last name.. " name="last_name" />
-    </div>
-    <div>
-      <label>Email</label>
-      <input type="email" placeholder="Enter email " name="email" />
-    </div>
-    <div>
-      <label>Account Type: </label>
-      <select name="account_type" class="custom-select" required>
-        <option selected>Select an account</option>
-        <option class="" value="Checking">Checking</option>
-        <option class="" value="Savings">Savings</option>
-      </select>
-    </div>
-    <div>
-      <label>Username</label>
-      <input type="text" placeholder="Username here.. " name="username" />
-      {% if username_error %}
-      <div class="error-message">{{username_error}}</div>
-      {% endif %}
-    </div>
-    <div>
-      <label>Password</label>
-      <input type="password" placeholder="Enter password" name="password" />
-    </div>
-
-    <div>
-      <label>Confirm password</label>
-      <input
-        type="password"
-        placeholder="Renter password"
-        name="confirm_password"
+<div class="container-fluid">
+  <div class="row vh-100">
+    <div class="col h-inherit bg-light">
+      <img
+        src="{% static 'banking/images/mountains.jpg'%}"
+        class="img-fluid rounded mx-auto d-block"
+        `
+        alt="nature picture"
       />
-
-      <p class="text-center mt-3">
-        Already have an account? <a href="{% url 'login' %}">Login</a>
-      </p>
-      {% if password_error %}
-      <div class="error-message">{{password_error}}</div>
-      {% endif %}
     </div>
-    <div><input type="submit" /></div>
-  </form>
+    <div class="col bg-light">
+      <h2 sty1e="margin: 0 auto">Sign up</h2>
+      <form method="post" action="{% url 'register'%}" class="p-4">
+        <div>
+          <label>First name </label>
+          <input
+            type="text"
+            placeholder="Your first name.. "
+            name="first_name"
+          />
+        </div>
+        <div>
+          <label>Last name </label>
+          <input type="text" placeholder="Your last name.. " name="last_name" />
+        </div>
+        <div>
+          <label>Email</label>
+          <input type="email" placeholder="Enter email " name="email" />
+        </div>
+        <div>
+          <label>Account Type: </label>
+          <select name="account_type" class="custom-select" required>
+            <option selected>Select an account</option>
+            <option class="" value="Checking">Checking</option>
+            <option class="" value="Savings">Savings</option>
+          </select>
+        </div>
+        <div>
+          <label>Username</label>
+          <input type="text" placeholder="Username here.. " name="username" />
+          {% if username_error %}
+          <div class="error-message">{{username_error}}</div>
+          {% endif %}
+        </div>
+        <div>
+          <label>Password</label>
+          <input type="password" placeholder="Enter password" name="password" />
+        </div>
+        <div>
+          <label>Confirm password</label>
+          <input
+            type="password"
+            placeholder="Renter password"
+            name="confirm_password"
+          />
+          <p class="text-center mt-3">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+          </p>
+          {% if password_error %}
+          <div class="error-message">{{password_error}}</div>
+          {% endif %}
+        </div>
+        <div><input type="submit" /></div>
+      </form>
+    </div>
+  </div>
 </div>
 
 {% endblock %} {% block script %}
-<link rel="stylesheet" href="{% static 'banking/login.css'%}" /> {% endblock %}
+<link rel="stylesheet" href="{% static 'banking/register/style.css'%}" />
+{% endblock %}
