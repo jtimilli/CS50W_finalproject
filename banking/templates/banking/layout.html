@@ -29,7 +29,11 @@
   </head>
   <body>
     <div class="navbar">
+      {% if user.is_authenticated == False %}
       <div class="navbar-logo"><a href="{% url 'landing'%}">Tim's bank</a></div>
+      {% else %}
+      <div class="navbar-logo">Tim's bank</div>
+      {% endif %}
       <nav class="navbar-menu">
         {% if user.is_authenticated %}
         <a href="{% url 'index'%}" class="navbar-menu-item">Home</a>
@@ -37,11 +41,10 @@
           >Transfer funds</a
         >
         <a href="{% url 'invest_page' %}" class="navbar-menu-item">Investing</a>
-        <a href="{% url 'loans' %}" class="navbar-menu-item">Loans</a>
         <a href="{% url 'logout' %}" class="navbar-menu-item">Log out</a>
         {% else %}
         <a href="{% url 'login' %}" class="badge m-2"> Login</a>
-        <a href="{% url 'register' %}" class="badge m-2"> Signup</a>
+        <a href="{% url 'register' %}" class="badge m-2"> Sign up</a>
 
         {% endif %}
       </nav>

@@ -6,10 +6,9 @@
     background-repeat: no-repeat;
   "
 >
-  <d class="row">
-    <div class="col-6"></div>
-    <div class="col-6" class="d-flex justify-content-center">
-      <div class="mt-3 form-container">
+  <div class="row d-flex float-right">
+    <div class="col mr-5">
+      <div class="mt-3 form-container justify-content-center">
         <h1 class="text-center mb-4">Login</h1>
         <form method="post">
           {% csrf_token %}
@@ -43,9 +42,9 @@
         </p>
       </div>
     </div>
-  </d>
-</div>
-{% endblock %} {% block script %}
-<link rel="stylesheet" href="{% static 'banking/login/style.css' %}" />
+  </div>
+  {% endblock %} {% block script %}
+  <link rel="stylesheet" href="{% static 'banking/login/style.css' %}" />
 
-{% endblock %}
+  {% endblock %}
+</div>

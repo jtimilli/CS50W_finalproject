@@ -1,19 +1,14 @@
 {% extends 'banking/layout.html' %} {% load static %}{% block body %}
 <div class="container-fluid vw-100 vh-100">
   <!-- section 1 -->
-  <div
-    class="row mt-5"
-    style="
-      padding-bottom: calc(var(--padding-vertical) + 4rem);
-      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 95%);
-    "
-  >
+  <!-- section 1 -->
+  <div class="row d-flex flex-wrap mt-5">
     <!-- left side -->
     <div
-      class="col-6 text-wrap d-flex flex-column ps-5"
+      class="col-lg-6 col-md-12 text-wrap d-flex flex-column ps-5"
       style="padding-left: 10%"
     >
-      <div style="width: 100%" class="">
+      <div style="width: 100%">
         <strong style="font-family: 'Open Sans', sans-serif; font-size: 40px">
           Save, invest, transfer money made easy
         </strong>
@@ -38,7 +33,6 @@
         >
           Free trial
         </button>
-
         <button
           type="button"
           class="btn btn-large rounded-pill"
@@ -51,7 +45,7 @@
 
     <!-- right side -->
     <div
-      class="col-6 me-3"
+      class="col-lg-6 col-md-12 me-3"
       style="padding-right: 5%; border-left: gray solid 0.5px"
     >
       <div class="h-100">
@@ -65,86 +59,81 @@
   </div>
 
   <!-- section 2 -->
-  <div class="row d-flex flex-row mt-5 p-5" style="background-color: #99a98f">
-    <div
-      class="card col-4"
-      style="width: 18rem; background: none !important; border: none"
-    >
-      <div class="p-5">
+  <div
+    class="row d-flex flex-row flex-wrap mt-5 p-4"
+    style="background-color: #99a98f"
+  >
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card p-5" style="background: none !important; border: none">
+        <div class="p-5">
+          <img
+            src="{% static 'banking/images/money-back.png'%}"
+            class="card-img-top"
+            alt="hand exchange"
+          />
+        </div>
+        <div
+          class="card-body bg-light rounded-pill"
+          style="
+            background-color: #d6e8db !important;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            font-family: 'Instrument Sans', sans-serif;
+          "
+        >
+          <p class="card-text">
+            Experience hassle-free and instant money transfers to your friends
+            and family, completely free of cost. Seamlessly send funds using
+            just their account number, making it quick and convenient to support
+            your loved ones.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card p-4" style="background: none !important; border: none">
         <img
-          src="{% static 'banking/images/money-back.png'%}"
+          src="{% static 'banking/images/finance.png'%}"
           class="card-img-top"
           alt="hand exchange"
         />
-      </div>
-
-      <div
-        class="card-body bg-light rounded-4"
-        style="
-          margin-top: ddddd;
-          background-color: #d6e8db !important;
-          box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-          font-family: 'Instrument Sans', sans-serif;
-        "
-      >
-        <p class="card-text">
-          Experience hassle-free and instant money transfers to your friends and
-          family, completely free of cost. Seamlessly send funds using just
-          their account number, making it quick and convenient to support your
-          loved ones.
-        </p>
+        <div
+          class="card-body bg-light rounded"
+          style="
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            font-family: 'Instrument Sans', sans-serif;
+          "
+        >
+          <p class="card-text my-auto text-wrap">
+            Enjoy peace of mind as you securely deposit your funds into your
+            account, knowing that it's safe and protected. With our banking app,
+            there are no monthly fees, allowing you to manage your finances
+            without any additional costs or worries.
+          </p>
+        </div>
       </div>
     </div>
-    <div
-      class="card col-4"
-      style="width: 18rem; background: none !important; border: none"
-    >
-      <img
-        src="{% static 'banking/images/finance.png'%}"
-        class="card-img-top"
-        alt="hand exchange"
-      />
-      <div
-        class="card-body bg-light rounded"
-        style="
-          margin-top: 13px;
-          box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-          font-family: 'Instrument Sans', sans-serif;
-        "
-      >
-        <p class="card-text my-auto text-wrap">
-          Enjoy peace of mind as you securely deposit your funds into your
-          account, knowing that it's safe and protected. With our banking app,
-          there are no monthly fees, allowing you to manage your finances
-          without any additional costs or worries.
-        </p>
-      </div>
-    </div>
-    <div
-      class="card col-4"
-      style="width: 18rem; background: none !important; border: none"
-    >
-      <div class="p-1d">
-        <img
-          src="{% static 'banking/images/invest.png'%}"
-          class="card-img-top"
-          alt="hand exchange"
-        />
-      </div>
-      <div
-        class="card-body bg-light rounded"
-        style="
-          margin-top: 13px;
-          background-color: #d6e8db !important;
-          box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-
-          font-family: 'Instrument Sans', sans-serif;
-        "
-      >
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card p-4" style="background: none !important; border: none">
+        <div class="p-1">
+          <img
+            src="{% static 'banking/images/invest.png'%}"
+            class="card-img-top"
+            alt="hand exchange"
+          />
+        </div>
+        <div
+          class="card-body rounded"
+          style="
+            background-color: #d6e8db !important;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            font-family: 'Instrument Sans', sans-serif;
+          "
+        >
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.
+          </p>
+        </div>
       </div>
     </div>
   </div>

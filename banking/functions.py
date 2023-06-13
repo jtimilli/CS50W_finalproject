@@ -8,10 +8,8 @@ def searchStock(symbol):
     try:
         api_key_value = api_key
 
-        # Call API
         url = f"https://api.twelvedata.com/time_series?symbol={symbol}&interval=1min&apikey={api_key}"
 
-        #
         response = requests.get(url).json()
         data = response['meta']
 

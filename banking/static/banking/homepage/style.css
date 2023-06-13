@@ -153,3 +153,26 @@ tr {
     opacity: 1;
   }
 }
+
+/* modile screen */
+
+@media (max-width: 1000px) {
+  #widget {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 70%;
+  }
+}
+
+@media (max-width: 760px) {
+  .card {
+    width: 90%;
+  }
+
+  header {
+    font-size: large;
+  }
+}
