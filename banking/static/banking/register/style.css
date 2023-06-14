@@ -1,6 +1,11 @@
 .body {
   margin-top: 20px;
 }
+
+.col {
+  padding: 0px;
+  background-color: #fcecde;
+}
 .form-container {
   padding: 50px;
   margin-top: 4%;
@@ -68,6 +73,14 @@ input[type="submit"]:hover {
   box-shadow: 1px 1px 1px #aaaaaa;
   margin: 10px;
 }
+.signup-label {
+  text-align: center;
+  font-family: cursive;
+}
+.responsive {
+  width: 100%;
+  height: auto;
+}
 
 /* Media queries for responsiveness */
 @media (max-width: 765px) {
@@ -79,5 +92,15 @@ input[type="submit"]:hover {
   input[type="password"],
   input[type="email"] {
     width: 70%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .left-col {
+    display: none;
+  }
+
+  .right-col {
+    background-image: url("../images/mountains.jpg");
   }
 }
