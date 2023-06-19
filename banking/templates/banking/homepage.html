@@ -14,26 +14,49 @@
     <section id="account-summary">
       <button
       type="button"
-      class="btn btn-info"
+      class="btn"
       data-toggle="modal"
       data-target="#myModal"
       id="open_deposit"
     >
       Make Deposit
     </button>
-        <div style="text-align: center;"><strong class="">Account Balance:</strong> <div class="display-3">${{account.balance}}</div></div>
+        <div class="account-balance" style="text-align: center; color: black;"><strong class="">Account Balance:</strong> <div class="display-3">${{account.balance}}</div></div>
     </section>
 
     <!-- Widgets at the button of the sreen -->
     <section id="widget">
 
       <!-- Widget #1 -->
-      <div class="card shadow mb-5  bg-white rounded">
-        <div class="card-header"> <h3>Something Useful</h3></div>
-        <div class="card-body p-0">    <ul>
-          </div>
+      <div class="card shadow mb-5 bg-white rounded">
+        <div class="card-header">
+          <h3>Latest</h3>
+        </div>
+        <div class="card-body p-4">
+          <ul>
+            {% for item in data %}
+            <li class="d-flex flex-column align-items-start mb-4">
+              <div class="row">
+                <div class="rounded-circle overflow-hidden col-3 d-flex align-items-center justify-content-center">
+                  <img src="{{ item.image_url }}" alt="image" class="rounded-circle" width="70" height="70">
+                </div>
+                <div class="col-8 d-flex align-items-center">
+                  <h4 style="font-family: fansong; font-size: 1.3rem;"> {{ item.title }}</h4>
+                </div>
+              </div>
+              
+              <div>
+                <p style="font-family: ui-serif; font-size: 1rem;">{{ item.snippet }}</p>
+                <a href="{{ item.link }}" target="_blank" class="badge badge-secondary">Read more</a>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
         <div class="card-footer"></div>
       </div>
+      
+      
 
       <!-- Widget #2 -->
       <div class="card shadow mb-5 bg-white rounded">
@@ -47,7 +70,7 @@
           <span class="m-2"><strong>No transaction yet</strong></span>
                   {% endfor %}
       </ul></div>
-      <div class="card-footer"><button class="btn btn-info"><a href="{% url 'download_csv'%}" style="text-decoration: none; color: white;"> Download Statement</a> </button></div>
+      <div class="card-footer"><button class="btn download-btn"><a href="{% url 'download_csv'%}" style="text-decoration: none; color: white;"> Download Statement</a> </button></div>
       </div>
 
 
@@ -115,12 +138,6 @@
       </div>
     </div>
   </div>
-  <!-- <footer>
-    <p>
-      Contact Us: 1234 Bank Street, Anytown, USA | Phone: 555-1234 | Email:
-      info@xyzbank.com
-    </p>
-  </footer> -->
 </body>
 
   {% endblock%} {% block script %}

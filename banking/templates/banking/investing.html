@@ -44,11 +44,11 @@
         // handle the response from the API
         console.log(data);
         if (data.error) {
-          setErrorMessage(`Error: ${data.error}`)
+          setErrorMessage(`${data.error}`)
           setTimeout(() => setErrorMessage(""), 4000)
         } else {
         
-          setSuccessMessage(`Success: ${data.success}`)
+          setSuccessMessage(`${data.success}`)
         
           setTimeout(() =>  {setShowModel(false),   setCurrentStock(null)}, 2000)
          
@@ -72,29 +72,31 @@ const Modal = props => {
     tradeStock(tradeType, stock, quantity, setErrorMessage, setSuccessMessage);
   };
 
+
+
   // Destructure props
   const {show, stock, closeModel} = props
   
 if (!show) { return null}
 return (
-  <div className="modal">
+  <div className="modal form">
     <div className="modal-content">  
       <div className="modal-header">
         <h4> Buy or Sell Stocks</h4>
         
-        <button className="button" onClick={() => closeModel(false)}> x </button>
+        <button type="button" className="btn-close"  onClick={() => closeModel(false)}> x </button> 
       </div>
 
         <div className="modal-body"> 
          { errorMessage && <div className="alert alert-danger"> {errorMessage} </div>}
          { successMessage && <div className="alert alert-success"> {successMessage} </div>}
-          `How much of {stock.symbol} would you like to Buy/Sell`
-          <input type="number" placeholder="Enter number of stocks" min="1" autofocus onChange={(e) => {setQuantity(e.target.value)} }/>
+          How much of {stock.symbol} would you like to Buy/Sell
+          <input type="number" className="form-control" placeholder="Enter number of stocks" min="1" autofocus onChange={(e) => {setQuantity(e.target.value)} }/>
           </div>
           <div className="modal-footer"> 
             
-            <button className="button btn-danger" onClick={() => handleTrade("sell")}> Sell</button>
-            <button className="button btn-success" onClick={() => handleTrade("buy")}> Buy</button>
+            <button className="btn btn-danger" onClick={() => handleTrade("sell")}> Sell</button>
+            <button className="btn btn-success" onClick={() => handleTrade("buy")}> Buy</button>
       </div>
       </div>
 

@@ -1,6 +1,6 @@
 import requests
 
-from .secrets import api_key
+from .secrets import api_key, news_api
 from django.http import JsonResponse
 
 
@@ -42,3 +42,21 @@ def searchAccount(array, account):
             end = mid - 1
 
     return False
+
+
+def getNews(symbols):
+    key = news_api
+    url = f"https://api.marketaux.com/v1/news/all?exchanges=INDEXSP&filter_entities=true&limit=10&published_after=2023-06-15T00:16&api_token={key}"
+
+    response = requests.get(url).json()
+    data = []
+
+    for item in response['data']:
+        title = item['title']
+        link = item['url']
+        image_url = item['image_url']
+        snippet = item['snippet']
+        data.append({'title': title, 'link': link,
+                    "image_url": image_url, 'snippet': snippet})
+
+    return data

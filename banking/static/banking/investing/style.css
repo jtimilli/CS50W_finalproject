@@ -1,3 +1,8 @@
+body {
+  height: 100vh;
+  background-image: url("../images/dbills.jpg");
+}
+
 .search-container {
   display: flex;
   justify-content: center;
@@ -80,6 +85,11 @@
 
 .modal-title {
   margin: 0;
+}
+
+.btn-close {
+  background: none;
+  border: none;
 }
 
 .modal-body {

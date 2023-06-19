@@ -12,13 +12,15 @@ ul {
 body {
   font-family: Arial, sans-serif;
   font-size: 16px;
-  background-color: #f2f2f2;
   color: #333;
+  background-image: url("../images/building-shot.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* Set header styles */
 header {
-  background-color: #333;
+  background-color: black;
   color: #fff;
   padding: 20px;
 }
@@ -72,14 +74,6 @@ input[type="number"] {
   padding: 5px;
 }
 
-button[type="submit"] {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-}
-
 /* Set footer styles */
 footer {
   background-color: #333;
@@ -122,9 +116,28 @@ tbody {
   -webkit-overflow-scrolling: touch;
 }
 
+.btn {
+  background-color: black !important;
+  color: #fff8de !important;
+  border-color: #fff8de !important;
+}
+
+.btn:hover {
+  color: black !important;
+  background-color: #fff8de !important;
+}
+
+.btn a:hover {
+  color: black !important;
+  background-color: #fff8de !important;
+}
+
 .card {
   width: 30%;
   height: 500px;
+  box-shadow: rgba(255, 255, 255, 0.4) 0px 2px 4px,
+    rgba(255, 255, 255, 0.3) 0px 7px 13px -3px,
+    rgba(255, 255, 255, 0.2) 0px -3px 0px inset;
 }
 
 .card-body {
@@ -164,6 +177,10 @@ tr {
 
   .card {
     width: 70%;
+  }
+
+  .account-balance {
+    color: white !important;
   }
 }
 

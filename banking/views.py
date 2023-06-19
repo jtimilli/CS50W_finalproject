@@ -14,9 +14,7 @@ from django.utils.timezone import localtime
 
 from .models import User, Account, Transactions, StockPortfolio
 from .secrets import api_key
-from .functions import searchStock, searchAccount
-
-# Create your views here.
+from .functions import searchStock, searchAccount, getNews
 
 
 @csrf_exempt
@@ -66,10 +64,10 @@ def load_landing(request):
 @login_required()
 def index(request):
     account = Account.objects.get(user=request.user)
-    # stocks = get_stocks()
+    data = getNews('')
     transactions = Transactions.objects.filter(
         account=account).order_by('-timestamp')
-    return render(request, 'banking/homepage.html', {"account": account, "transactions": transactions})
+    return render(request, 'banking/homepage.html', {"account": account, "transactions": transactions, "data": data})
 
 
 @csrf_exempt
@@ -218,8 +216,6 @@ def checkForReceiver(request):
 def load_investPage(request):
     return render(request, "banking/investing.html")
 
-# TODO: Replace test data with queryset from user's portfolio
-
 
 def loadUserStock(request):
     account = Account.objects.get(user=request.user)
@@ -290,6 +286,10 @@ def tradeStocks(request):
                 account=account, stock=symbol)
         except StockPortfolio.DoesNotExist:
             users_portfolio = None
+
+        # If quantity is 0
+        if quantity < 1:
+            return JsonResponse({'error': "Must buy or sell at least one stock"})
 
         # Handle buying the stock
         if trade_type == "buy":

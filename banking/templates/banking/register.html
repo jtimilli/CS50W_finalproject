@@ -1,21 +1,27 @@
 {% extends 'banking/layout.html'%} {% load static %} {% block body %}
 <div class="container-fluid">
   <div class="row vh-100">
-    <div class="col h-inherit bg-light">
+    <div class="left-col col h-inherit">
       <img
         src="{% static 'banking/images/mountains.jpg'%}"
-        class="img-fluid rounded mx-auto d-block"
-        `
+        class="img-fluid rounded mx-auto d-block responsive"
         alt="nature picture"
       />
     </div>
-    <div class="col bg-light">
-      <h2 sty1e="margin: 0 auto">Sign up</h2>
-      <form method="post" action="{% url 'register'%}" class="p-4">
+    <div class="right-col col" style="padding: 40px">
+      <div class="alert alert-danger fields"></div>
+      <h2 class="signup-label">Sign up</h2>
+      <form
+        method="post"
+        action="{% url 'register'%}"
+        class="p-4"
+        onsubmit="return validate()"
+      >
         <div>
           <label>First name </label>
           <input
             type="text"
+            s
             placeholder="Your first name.. "
             name="first_name"
           />
@@ -51,7 +57,7 @@
           <label>Confirm password</label>
           <input
             type="password"
-            placeholder="Renter password"
+            placeholder="Enter password"
             name="confirm_password"
           />
           <p class="text-center mt-3">
@@ -61,7 +67,7 @@
           <div class="error-message">{{password_error}}</div>
           {% endif %}
         </div>
-        <div><input type="submit" /></div>
+        <div><input type="submit" class="submit-btn" /></div>
       </form>
     </div>
   </div>
@@ -69,4 +75,5 @@
 
 {% endblock %} {% block script %}
 <link rel="stylesheet" href="{% static 'banking/register/style.css'%}" />
+<script src="{% static 'banking/register/index.js' %}"></script>
 {% endblock %}

@@ -23,6 +23,7 @@
       >
         <button
           type="button"
+          id="login-btn"
           class="btn btn-large rounded-pill h-100 ms-3"
           style="
             background-color: #efbd42;
@@ -31,9 +32,10 @@
             width: 50%;
           "
         >
-          Free trial
+          Login
         </button>
         <button
+          id="signup-btn"
           type="button"
           class="btn btn-large rounded-pill"
           style="width: 50%"
@@ -154,4 +156,6 @@
   </div>
 </div>
 
+{% endblock %} {% block script %}
+<script src="{% static 'banking/landing/index.js'%}"></script>
 {% endblock %}
