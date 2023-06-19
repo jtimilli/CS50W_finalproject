@@ -30,9 +30,23 @@
   <body>
     <div class="navbar">
       {% if user.is_authenticated == False %}
-      <div class="navbar-logo"><a href="{% url 'landing'%}">Tim's bank</a></div>
+      <div class="navbar-logo rounded">
+        <a href="{% url 'landing'%}"
+          ><img
+            alt="banking icon"
+            src="{% static 'banking/images/bank.png'%}"
+            style="max-height: 100%; max-width: 100%"
+        /></a>
+      </div>
       {% else %}
-      <div class="navbar-logo">Tim's bank</div>
+      <div class="navbar-logo rounded">
+        <a href="{% url 'index'%}"
+          ><img
+            alt="banking icon"
+            src="{% static 'banking/images/bank.png'%}"
+            style="max-height: 100%; max-width: 100%"
+        /></a>
+      </div>
       {% endif %}
       <nav class="navbar-menu">
         {% if user.is_authenticated %}

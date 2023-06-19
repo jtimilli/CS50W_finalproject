@@ -10,13 +10,16 @@ body {
   align-items: center;
   height: 50px;
   color: black;
-  padding: 0 20px;
+  padding: 0;
   z-index: 999;
   background-color: #fff8de;
 }
 
 .navbar-logo {
   font-weight: bold;
+  height: 100%;
+  margin-left: 0.5rem;
+  padding-bottom: 4px;
 }
 
 .navbar-menu {
@@ -96,6 +99,6 @@ body {
   }
 }
 
-a:hover {
+a {
   color: black;
 }
