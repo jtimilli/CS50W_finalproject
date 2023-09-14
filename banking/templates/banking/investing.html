@@ -141,7 +141,7 @@ return (
 }, [searchTerm, stocks]);
 
 
-
+    
     const renderStock = (symbol) => {
      fetch(`/stock_info/${symbol}`).then(response => response.json().then(
      data => { setSearchTerm("");

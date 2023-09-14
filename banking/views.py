@@ -125,8 +125,6 @@ def deposit(request):
 def loans(request):
     return render(request, "banking/loans.html")
 
-# TODO: edit columns and how timestamp is presented
-
 
 def download_transactions(request):
     account = Account.objects.get(user=request.user)
@@ -266,8 +264,6 @@ def loadStock(request, symbol):
         return JsonResponse(response["data"], status=response["status"], safe=False)
     else:
         return JsonResponse({"Error": response["error"]}, status=response["status"])
-
-# TODO:
 
 
 @csrf_exempt
